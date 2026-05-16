@@ -128,5 +128,9 @@ try:
         use_container_width=True
     )
 
+#except Exception as e:
+#    st.error(f"Erro na conexão ou na estrutura dos dados. Certifique-se de que a planilha foi compartilhada com o robô. Detalhes: {e}")
+
 except Exception as e:
-    st.error(f"Erro na conexão ou na estrutura dos dados. Certifique-se de que a planilha foi compartilhada com o robô. Detalhes: {e}")
+    # Este comando vai exibir o erro técnico real em uma caixa vermelha detalhada
+    st.exception(e)
