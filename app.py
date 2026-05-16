@@ -32,10 +32,19 @@ def carregar_dados_do_drive():
     cliente_gspread = gspread.authorize(credenciais)
     
     # URL injetada diretamente no comando de abertura para evitar o erro NoValidUrlKeyFound
-    url_real = "https://google.com"
-    planilha = cliente_gspread.open_by_url(url_real)
+    #url_real = "https://google.com"
+    #planilha = cliente_gspread.open_by_url(url_real)
+    #aba_principal = planilha.get_worksheet(0)
+    #dados = aba_principal.get_all_records()
+
+    # Usando a CHAVE pura para o gspread nunca mais dar erro de URL
+    CHAVE_DA_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69l"
+    planilha = cliente_gspread.open_by_key(CHAVE_DA_PLANILHA)
     aba_principal = planilha.get_worksheet(0)
     dados = aba_principal.get_all_records()
+    
+    return pd.DataFrame(dados)
+    
     
     return pd.DataFrame(dados)
 
