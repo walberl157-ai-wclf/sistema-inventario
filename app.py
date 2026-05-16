@@ -2,9 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import io
-import json
-from google.oauth2.service_account import Credentials
-import gspread
+from streamlit_gsheets import GSheetsConnection
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -16,44 +14,21 @@ st.set_page_config(page_title="Gerador de Relatórios", page_icon="📊", layout
 st.title("📊 Gerador Automatizado de Relatórios")
 st.write("O sistema está conectado diretamente ao Google Drive. Clique no botão abaixo para gerar o relatório atualizado.")
 
-@st.cache_data(ttl=60)
-def carregar_dados_do_drive():
-    # Coleta os dados limpos direto dos campos individuais dos Secrets
-    credenciais_dict = {
-        "type": "service_account",
-        "project_id": st.secrets["google_drive"]["project_id"],
-        "private_key": st.secrets["google_drive"]["private_key"].replace('\\n', '\n'),
-        "client_email": st.secrets["google_drive"]["client_email"],
-        "token_uri": "https://googleapis.com"
-    }
-    
-    # Endereços corretos de escopo para as APIs do Google Sheets e Drive
-    escopos = [
-        "https://googleapis.com",
-        "https://googleapis.com"
-    ]
-    
-    credenciais = Credentials.from_service_account_info(credenciais_dict, scopes=escopos)
-    cliente_gspread = gspread.authorize(credenciais)
-    
-    # Usando a CHAVE pura para o gspread nunca mais dar erro de URL
-    CHAVE_DA_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69l"
-    planilha = cliente_gspread.open_by_key(CHAVE_DA_PLANILHA)
-    aba_principal = planilha.get_worksheet(0)
-    dados = aba_principal.get_all_records()
-    
-    return pd.DataFrame(dados)
-    
+# URL VALIDADA DA SUA PLANILHA GOOGLE
+URL_PLANILHA = "https://google.com"
+
 try:
-    df_original = carregar_dados_do_drive()
+    # Conexão nativa e automática do Streamlit com o Google Sheets
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    df_original = conn.read(spreadsheet=URL_PLANILHA, ttl="1m")
     
-    # Padroniza os nomes das colunas vindas do Google Sheets
+    # Padroniza os nomes das colunas vindas da planilha
     df_original.columns = df_original.columns.str.lower().str.strip()
     
     # Correção para ler a coluna mesmo que ela tenha acento na planilha
     if 'endereço' in df_original.columns:
         df_original = df_original.rename(columns={'endereço': 'endereco'})
-    
+        
     # Aplica os filtros e ordenações solicitados
     df_original['endereco'] = df_original['endereco'].astype(str).str.strip()
     df = df_original[df_original['endereco'] == '01010333 - ULTRABOOK/NOTEBOOK / TABLET']
@@ -132,9 +107,5 @@ try:
         use_container_width=True
     )
 
-#except Exception as e:
-#    st.error(f"Erro na conexão ou na estrutura dos dados. Certifique-se de que a planilha foi compartilhada com o robô. Detalhes: {e}")
-
 except Exception as e:
-    # Este comando vai exibir o erro técnico real em uma caixa vermelha detalhada
     st.exception(e)
