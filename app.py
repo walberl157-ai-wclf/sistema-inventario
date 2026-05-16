@@ -16,21 +16,20 @@ st.set_page_config(page_title="Gerador de Relatórios", page_icon="📊", layout
 st.title("📊 Gerador Automatizado de Relatórios")
 st.write("O sistema está conectado diretamente ao Google Drive. Clique no botão abaixo para gerar o relatório atualizado.")
 
-# LINK DA SUA PLANILHA GOOGLE (Substitua pelo link real da sua planilha)
-#URL_DA_PLANILHA = "https://docs.google.com/spreadsheets/d/15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I/edit?gid=865940462#gid=865940462"
-# Substitua a linha 21 por esta exatamente como está aqui:
-URL_DA_PLANILHA = "https://google.com"
+# ID ÚNICO E ATUALIZADO DA SUA PLANILHA GOOGLE
+ID_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I"
 
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=300) # Mantém os dados em cache por 5 minutos
 def carregar_dados_do_drive():
+    # Recupera a chave secreta que você salvou no painel do Streamlit
     info_chave = st.secrets["gspread"]["service_account"]
     escopos = ["https://googleapis.com", "https://googleapis.com"]
     
+    # Conecta usando a biblioteca oficial do Google
     credenciais = Credentials.from_service_account_info(json.loads(info_chave), scopes=escopos)
     cliente_gspread = gspread.authorize(credenciais)
     
-    # Abrindo direto pela CHAVE/ID (Método mais seguro contra erro 404)
-    ID_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I"
+    # Abre a planilha diretamente pelo ID exclusivo
     planilha = cliente_gspread.open_by_key(ID_PLANILHA)
     aba_principal = planilha.get_worksheet(0)
     dados = aba_principal.get_all_records()
@@ -41,8 +40,12 @@ try:
     # Executa a busca automática nos bastidores
     df_original = carregar_dados_do_drive()
     
-    # Padronizar nomes de colunas
+    # Padroniza os nomes das colunas vindas do Google Sheets
     df_original.columns = df_original.columns.str.lower().str.strip()
+    
+    # Correção para ler a coluna mesmo que ela tenha acento na planilha
+    if 'endereço' in df_original.columns:
+        df_original = df_original.rename(columns={'endereço': 'endereco'})
     
     # Aplica os filtros e ordenações solicitados
     df_original['endereco'] = df_original['endereco'].astype(str).str.strip()
@@ -70,7 +73,7 @@ try:
     story.append(Paragraph(f"<b>Data de Emissão:</b> {data_hora_emissao}", normal_style))
     story.append(Spacer(1, 15))
     
-    col_widths = [65, 55, 82, 210, 140]
+    col_widths = [60, 55, 95, 182, 160]
     table_data = [['Patrimônio', 'Marca', 'Modelo', 'Unidade Administrativa', 'Responsável']]
     
     ultimo_responsavel = None
