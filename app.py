@@ -16,10 +16,7 @@ st.set_page_config(page_title="Gerador de Relatórios", page_icon="📊", layout
 st.title("📊 Gerador Automatizado de Relatórios")
 st.write("O sistema está conectado diretamente ao Google Drive. Clique no botão abaixo para gerar o relatório atualizado.")
 
-# URL COMPLETA E VALIDADA DA SUA PLANILHA
-URL_PLANILHA = "https://google.com"
-
-@st.cache_data(ttl=60) # Atualiza o cache a cada 1 minuto
+@st.cache_data(ttl=60)
 def carregar_dados_do_drive():
     # Coleta os dados limpos direto dos campos individuais dos Secrets
     credenciais_dict = {
@@ -34,7 +31,9 @@ def carregar_dados_do_drive():
     credenciais = Credentials.from_service_account_info(credenciais_dict, scopes=escopos)
     cliente_gspread = gspread.authorize(credenciais)
     
-    planilha = cliente_gspread.open_by_url(URL_PLANILHA)
+    # URL injetada diretamente no comando de abertura para evitar o erro NoValidUrlKeyFound
+    url_real = "https://google.com"
+    planilha = cliente_gspread.open_by_url(url_real)
     aba_principal = planilha.get_worksheet(0)
     dados = aba_principal.get_all_records()
     
