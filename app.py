@@ -17,6 +17,9 @@ st.title("📊 Gerador Automatizado de Relatórios")
 st.write("O sistema está conectado diretamente ao Google Drive. Clique no botão abaixo para gerar o relatório atualizado.")
 
 # ID ÚNICO E ATUALIZADO DA SUA PLANILHA GOOGLE
+#ID_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I"
+
+# Substitua a linha 21 por esta exatamente como está aqui:
 ID_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I"
 
 @st.cache_data(ttl=300) # Mantém os dados em cache por 5 minutos
