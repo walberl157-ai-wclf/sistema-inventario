@@ -27,16 +27,15 @@ def carregar_dados_do_drive():
         "token_uri": "https://googleapis.com"
     }
     
-    escopos = ["https://googleapis.com", "https://googleapis.com"]
+    # Endereços corretos de escopo para as APIs do Google Sheets e Drive
+    escopos = [
+        "https://googleapis.com",
+        "https://googleapis.com"
+    ]
+    
     credenciais = Credentials.from_service_account_info(credenciais_dict, scopes=escopos)
     cliente_gspread = gspread.authorize(credenciais)
     
-    # URL injetada diretamente no comando de abertura para evitar o erro NoValidUrlKeyFound
-    #url_real = "https://google.com"
-    #planilha = cliente_gspread.open_by_url(url_real)
-    #aba_principal = planilha.get_worksheet(0)
-    #dados = aba_principal.get_all_records()
-
     # Usando a CHAVE pura para o gspread nunca mais dar erro de URL
     CHAVE_DA_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69l"
     planilha = cliente_gspread.open_by_key(CHAVE_DA_PLANILHA)
@@ -45,9 +44,6 @@ def carregar_dados_do_drive():
     
     return pd.DataFrame(dados)
     
-    
-    return pd.DataFrame(dados)
-
 try:
     df_original = carregar_dados_do_drive()
     
