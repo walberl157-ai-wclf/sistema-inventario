@@ -17,20 +17,21 @@ st.title("📊 Gerador Automatizado de Relatórios")
 st.write("O sistema está conectado diretamente ao Google Drive. Clique no botão abaixo para gerar o relatório atualizado.")
 
 # LINK DA SUA PLANILHA GOOGLE (Substitua pelo link real da sua planilha)
-URL_DA_PLANILHA = "https://docs.google.com/spreadsheets/d/15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I/edit?gid=865940462#gid=865940462"
+#URL_DA_PLANILHA = "https://docs.google.com/spreadsheets/d/15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I/edit?gid=865940462#gid=865940462"
+# Substitua a linha 21 por esta exatamente como está aqui:
+URL_DA_PLANILHA = "https://google.com"
 
-@st.cache_data(ttl=600) # Mantém os dados em cache por 10 minutos para ficar rápido
+@st.cache_data(ttl=600)
 def carregar_dados_do_drive():
-    # Recupera a chave secreta que você salvou no painel do Streamlit
     info_chave = st.secrets["gspread"]["service_account"]
     escopos = ["https://googleapis.com", "https://googleapis.com"]
     
-    # Conecta usando a biblioteca oficial do Google
     credenciais = Credentials.from_service_account_info(json.loads(info_chave), scopes=escopos)
     cliente_gspread = gspread.authorize(credenciais)
     
-    # Abre a planilha pelo link e captura todos os dados da primeira aba
-    planilha = cliente_gspread.open_by_url(URL_DA_PLANILHA)
+    # Abrindo direto pela CHAVE/ID (Método mais seguro contra erro 404)
+    ID_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I"
+    planilha = cliente_gspread.open_by_key(ID_PLANILHA)
     aba_principal = planilha.get_worksheet(0)
     dados = aba_principal.get_all_records()
     
