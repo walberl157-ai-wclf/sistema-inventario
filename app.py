@@ -16,31 +16,25 @@ st.set_page_config(page_title="Gerador de Relatórios", page_icon="📊", layout
 st.title("📊 Gerador Automatizado de Relatórios")
 st.write("O sistema está conectado diretamente ao Google Drive. Clique no botão abaixo para gerar o relatório atualizado.")
 
-# ID ÚNICO E ATUALIZADO DA SUA PLANILHA GOOGLE
-#ID_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I"
+# URL COMPLETA E VALIDADA DA SUA PLANILHA
+URL_PLANILHA = "https://google.com"
 
-# Substitua a linha 21 por esta exatamente como está aqui:
-ID_PLANILHA = "15tPcfqlwmhFG70ZKpSBcEHlQECG6PgB1NEh_eSLY69I"
-
-@st.cache_data(ttl=300) # Mantém os dados em cache por 5 minutos
+@st.cache_data(ttl=60) # Atualiza o cache a cada 1 minuto
 def carregar_dados_do_drive():
-    # Recupera a chave secreta que você salvou no painel do Streamlit
     info_chave = st.secrets["gspread"]["service_account"]
     escopos = ["https://googleapis.com", "https://googleapis.com"]
     
-    # Conecta usando a biblioteca oficial do Google
     credenciais = Credentials.from_service_account_info(json.loads(info_chave), scopes=escopos)
     cliente_gspread = gspread.authorize(credenciais)
     
-    # Abre a planilha diretamente pelo ID exclusivo
-    planilha = cliente_gspread.open_by_key(ID_PLANILHA)
+    # Abre diretamente pela URL completa para não ter erro de ID
+    planilha = cliente_gspread.open_by_url(URL_PLANILHA)
     aba_principal = planilha.get_worksheet(0)
     dados = aba_principal.get_all_records()
     
     return pd.DataFrame(dados)
 
 try:
-    # Executa a busca automática nos bastidores
     df_original = carregar_dados_do_drive()
     
     # Padroniza os nomes das colunas vindas do Google Sheets
@@ -76,7 +70,7 @@ try:
     story.append(Paragraph(f"<b>Data de Emissão:</b> {data_hora_emissao}", normal_style))
     story.append(Spacer(1, 15))
     
-    col_widths = [60, 55, 95, 182, 160]
+    col_widths =
     table_data = [['Patrimônio', 'Marca', 'Modelo', 'Unidade Administrativa', 'Responsável']]
     
     ultimo_responsavel = None
@@ -120,7 +114,6 @@ try:
     doc.build(story)
     buffer.seek(0)
     
-    # 4. BOTÃO DE DOWNLOAD DIRETO
     st.download_button(
         label="📥 Baixar Relatório Atualizado em PDF",
         data=buffer,
