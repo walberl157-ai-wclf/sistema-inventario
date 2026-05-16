@@ -70,7 +70,7 @@ try:
     story.append(Paragraph(f"<b>Data de Emissão:</b> {data_hora_emissao}", normal_style))
     story.append(Spacer(1, 15))
     
-    col_widths =
+    col_widths = [60, 55, 95, 182, 160]
     table_data = [['Patrimônio', 'Marca', 'Modelo', 'Unidade Administrativa', 'Responsável']]
     
     ultimo_responsavel = None
