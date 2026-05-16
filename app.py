@@ -21,13 +21,19 @@ URL_PLANILHA = "https://google.com"
 
 @st.cache_data(ttl=60) # Atualiza o cache a cada 1 minuto
 def carregar_dados_do_drive():
-    info_chave = st.secrets["gspread"]["service_account"]
-    escopos = ["https://googleapis.com", "https://googleapis.com"]
+    # Coleta os dados limpos direto dos campos individuais dos Secrets
+    credenciais_dict = {
+        "type": "service_account",
+        "project_id": st.secrets["google_drive"]["project_id"],
+        "private_key": st.secrets["google_drive"]["private_key"].replace('\\n', '\n'),
+        "client_email": st.secrets["google_drive"]["client_email"],
+        "token_uri": "https://googleapis.com"
+    }
     
-    credenciais = Credentials.from_service_account_info(json.loads(info_chave), scopes=escopos)
+    escopos = ["https://googleapis.com", "https://googleapis.com"]
+    credenciais = Credentials.from_service_account_info(credenciais_dict, scopes=escopos)
     cliente_gspread = gspread.authorize(credenciais)
     
-    # Abre diretamente pela URL completa para não ter erro de ID
     planilha = cliente_gspread.open_by_url(URL_PLANILHA)
     aba_principal = planilha.get_worksheet(0)
     dados = aba_principal.get_all_records()
