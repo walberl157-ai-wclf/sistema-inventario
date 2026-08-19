@@ -46,6 +46,7 @@ ProjetoPatrimonio/
 
 
 ### 📊 Esquema Relacional do Banco de Dados (PostgreSQL)
+
 2. O banco de dados está normalizado e numa boa estruturado, com tabelas de suporte para marcas, modelos, localizações e lotes, deixando a tabela principal (patrimonios) limpa e eficiente.
 
 2.1. Código Mermaid.js
