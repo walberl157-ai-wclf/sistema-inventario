@@ -127,10 +127,12 @@ erDiagram
 3) Chaves Primárias Naturais: Mostra que o campo patrimonio (número patrimonial) é a própria Chave Primária (PK) de texto (character varying (50) ou varchar (50)), eliminando a necessidade de um ID sequencial numérico para essa tabela específica.
 
 
-### 📄 Processamento de PDF com pdfplumber
-3. Como o sistema não possui cadastro manual de bens, o fluxo de dados começa obrigatoriamente pelo upload do relatório PDF institucional. O arquivo é processado em memória, os dados são extraídos e, em seguida, salvos no banco de dados.
+### 📄 3. Processamento de PDF com pdfplumber
 
-3.1. O Modelo de Dados (models.py) 
+Como o sistema não possui cadastro manual de bens, o fluxo de dados começa obrigatoriamente pelo upload do relatório PDF institucional. O arquivo é processado em memória, os dados são extraídos e, em seguida, salvos no banco de dados.
+
+#### 3.1. O Modelo de Dados (models.py) 
+
 Suporta as funcionalidades do sistema que contém: o upload de relatório PDF institucional, extraindo e salvando os dados no banco de dados; o estado atual do hardware; e o histórico de movimentações. O sistema utiliza modelos. Há o modelo principal que está conectado aos outros, relacionados a aquele, por uma chave estrangeira (ForeignKey):
 
 PYTHON
@@ -285,7 +287,8 @@ class Patrimonio(models.Model):
         return f"Patrimônio {self.patrimonio} - {self.tipo_hardware.nome}"
 ```
 
-3.2. O Serviço de Extração na View de Upload (em: views.py)
+#### 3.2. O Serviço de Extração na View de Upload (em: views.py)
+
 Há função responsável por varrer o PDF. O pdfplumber abre o documento e lê o texto linha por linha. É necessário adaptar os termos PATRIMÔNIO:, PAT_ANTIGO:, TIPO: etc., de acordo com a estrutura exata do relatório da instituição. 
 No Django, quando o formulário HTML é enviado, o arquivo fica disponível em request.FILES. Esse arquivo é passado diretamente para o views.py (na função responsável por varrer o PDF) sem precisar salvá-lo no disco do servidor:
 
