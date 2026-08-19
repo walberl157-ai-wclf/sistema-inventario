@@ -50,7 +50,8 @@ ProjetoPatrimonio/
 
 2. O banco de dados está normalizado e numa boa estruturado, com tabelas de suporte para marcas, modelos, localizações e lotes, deixando a tabela principal (patrimonios) limpa e eficiente.
 
-2.1. Código Mermaid.js
+#### 2.1. Código Mermaid.js
+
 Aqui está o código completo em Mermaid.js baseado exatamente no script SQL, constante no arquivo README.md do GitHub.
 O diagrama abaixo ilustra a arquitetura normalizada do banco de dados. A tabela central `patrimonios` conecta-se a todas as tabelas especialistas através de chaves estrangeiras (`FK`).
 
