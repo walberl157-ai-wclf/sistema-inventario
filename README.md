@@ -133,6 +133,7 @@ Suporta as funcionalidades do sistema que contém: o upload de relatório PDF in
 
 PYTHON
 
+```text
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -281,7 +282,7 @@ class Patrimonio(models.Model):
 
     def __str__(self):
         return f"Patrimônio {self.patrimonio} - {self.tipo_hardware.nome}"
-
+```
 
 3.2. O Serviço de Extração na View de Upload (em: views.py)
 Há função responsável por varrer o PDF. O pdfplumber abre o documento e lê o texto linha por linha. É necessário adaptar os termos PATRIMÔNIO:, PAT_ANTIGO:, TIPO: etc., de acordo com a estrutura exata do relatório da instituição. 
