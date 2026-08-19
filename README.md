@@ -2,7 +2,6 @@
 1. O Django foi organizado em uma estrutura limpa e escalável, conforme abaixo:
 
 ESTRUTURA DO DJANGO
-
 ```text
 ProjetoPatrimonio/
 │
@@ -132,7 +131,6 @@ erDiagram
 Suporta as funcionalidades do sistema que contém: o upload de relatório PDF institucional, extraindo e salvando os dados no banco de dados; o estado atual do hardware; e o histórico de movimentações. O sistema utiliza modelos. Há o modelo principal que está conectado aos outros, relacionados a aquele, por uma chave estrangeira (ForeignKey):
 
 PYTHON
-
 ```text
 from django.db import models
 from django.contrib.auth.models import User
