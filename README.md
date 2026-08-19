@@ -3,6 +3,7 @@
 
 ESTRUTURA DO DJANGO
 
+```text
 ProjetoPatrimonio/
 │
 ├── sistema_producao/
@@ -42,6 +43,7 @@ ProjetoPatrimonio/
 │   └── README.md                     # O tutorial em si
 │
 └── ambdj/            # Ambiente do Django
+```
 
 
 ### 📊 Esquema Relacional do Banco de Dados (PostgreSQL)
