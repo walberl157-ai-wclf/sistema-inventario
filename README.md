@@ -1,6 +1,7 @@
 ### 📁 Organização e Estrutura do Django
 
 
+
 1. O Django foi organizado em uma estrutura limpa e escalável, conforme abaixo:
 
 ESTRUTURA DO DJANGO
