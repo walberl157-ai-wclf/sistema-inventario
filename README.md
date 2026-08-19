@@ -287,7 +287,7 @@ Há função responsável por varrer o PDF. O pdfplumber abre o documento e lê 
 No Django, quando o formulário HTML é enviado, o arquivo fica disponível em request.FILES. Esse arquivo é passado diretamente para o views.py (na função responsável por varrer o PDF) sem precisar salvá-lo no disco do servidor:
 
 PHYTON
-
+```text
 # (IMPORTAR RELATÓRIO DO ASI EM PDF RELACIONADO A PATRIMÔNIOS DE EQUIPAMENTOS DE TIC DA PRMA, PRM'S BACABAL-MA, CAXIAS-MA E IMPERATRIZ-MA, E ERM/BALSAS-MA)
 def converter_data(data_str):
     """Converte datas do formato DD/MM/AAAA para AAAA-MM-DD para o Postgres"""
@@ -575,3 +575,4 @@ def importar_pdf_patrimonio(request):
     # === RETORNO OBRIGATÓRIO PARA REQUISIÇÕES GET (Carga inicial da página) ===
     # Esta linha deve ficar no final da função, com o mesmo recuo do primeiro "if"
     return render(request, 'patrimonio/upload.html')
+```
